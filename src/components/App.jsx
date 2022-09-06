@@ -13,7 +13,7 @@ export const App = () => {
   const [largeImage, setLargeImage] = useState('');
   const [error, setError] = useState(false);
   const [pictures, setPictures] = useState([]);
-  const [imgTags, showImgTags] = useState('');
+  const [imgTags, setImgTags] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [finish, setFinish] = useState(false);
@@ -33,8 +33,9 @@ export const App = () => {
     }
   };
 
-  const handleOpenModal = largeImage => {
+  const handleOpenModal = (largeImage, tags) => {
     setLargeImage(largeImage);
+    setImgTags(tags);
     setShowModal(true);
   };
 
@@ -50,7 +51,7 @@ export const App = () => {
   };
 
   const closeModal = () => {
-    setShowModal(!showModal)
+    setShowModal(!showModal);
   };
 
   useEffect(() => {

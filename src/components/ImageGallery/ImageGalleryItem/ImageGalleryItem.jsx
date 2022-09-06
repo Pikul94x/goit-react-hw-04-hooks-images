@@ -5,7 +5,7 @@ export default function ImageGalleryItem({ picture, onClick }) {
   return (
     <li
       className={styles.imageGalleryItem}
-      onClick={() => onClick(picture.largeImageURL)}
+      onClick={() => onClick(picture.largeImageURL, picture.tags)}
     >
       <img
         src={picture.webformatURL}
