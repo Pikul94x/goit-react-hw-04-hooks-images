@@ -4,58 +4,38 @@ import Searchbar from './Searchbar/Searchbar';
 import Button from './Button/Button';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
-import { Api } from '../Services/Api/Api';
+import { Api } from '../services/api/api';
 import './App.css';
-
-const initialState = {
-  pictures: [],
-  largeImage: '',
-  imgTags: '',
-  error: false,
-  showModal: false,
-  loading: false,
-  finish: false,
-};
 
 export const App = () => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
-  const [state, setState] = useState(initialState);
-
-  const { pictures, loading, error, showModal, largeImage, imgTags, finish } =
-    state;
+  const [largeImage, setLargeImage] = useState('');
+  const [error, setError] = useState(false);
+  const [pictures, setPictures] = useState([]);
+  const [imgTags, showImgTags] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [finish, setFinish] = useState(false);
 
   const fetchPictures = async () => {
     try {
       const { data } = await Api.searchImages(page, query);
-      setState(({ pictures }) => {
-        const newState = {
-          pictures: [...pictures, ...data.hits],
-          loading: false,
-          error: false,
-        };
-        if (data.hits.length < 11) {
-          newState.finish = true;
-        }
-        if (!data.hits.length) {
-          newState.error = true;
-        }
-        return newState;
-      });
+      setPictures([...pictures, ...data.hits]);
+      setLoading(false);
+      setError(!data.hits.length);
+      if (data.hits.length < 11) {
+        setFinish(true);
+      }
     } catch (error) {
-      setState({
-        loading: false,
-        error: false,
-      });
+      setLoading(false);
+      setError(false);
     }
   };
 
   const handleOpenModal = largeImage => {
-    setState({
-      ...state,
-      largeImage,
-      showModal: true,
-    });
+    setLargeImage(largeImage);
+    setShowModal(true);
   };
 
   const onChangeQuery = query => {
@@ -66,24 +46,21 @@ export const App = () => {
     setPage(prevState => {
       return prevState + 1;
     });
-    state.loading = true;
-    setState({ ...state });
+    setLoading(true);
   };
 
   const closeModal = () => {
-    setState(({ showModal }) => {
-      return {
-        ...state,
-        showModal: !showModal,
-      };
-    });
+    setShowModal(!showModal)
   };
 
   useEffect(() => {
     if (!query) {
       return;
     }
-    setState({ pictures: [], loading: true, finish: false });
+    setPictures([]);
+    setLoading(true);
+    setFinish(false);
+
     fetchPictures();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
