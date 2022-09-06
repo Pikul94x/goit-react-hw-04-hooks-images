@@ -4,7 +4,7 @@ import Searchbar from './Searchbar/Searchbar';
 import Button from './Button/Button';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
-import { Api } from '../services/api/api';
+import { Api } from '../services/api/api.js';
 import './App.css';
 
 export const App = () => {
